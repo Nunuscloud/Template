@@ -1,6 +1,12 @@
 #!/bin/bash
 sudo hostnamectl set-hostname ${new_hostname} &&
-sudo apt-get install -y lolcat figlet &&
+sudo apt update -y &&
+sudo apt install figlet &&
+# create the directory for the fonts
+mkdir -p ~/.local/share/fonts/figlet-fonts/
+# clone it with git to that directory
+git clone https://github.com/xero/figlet-fonts.git ~/.local/share/fonts/figlet-fonts/ &&
+sudo snap install lolcat &&
 echo "function lolbanner() {
   figlet -c -f ~/.local/share/fonts/figlet-fonts/3d.flf ${new_hostname} | lolcat
 }
