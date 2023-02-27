@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 # Install Python 3 and pip
 sudo apt-get update
