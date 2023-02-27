@@ -1,8 +1,26 @@
 #!/bin/bash
-sudo apt-get -y update &&
-sudo apt-get -y install ca-certificates curl gnupg lsb-release &&
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && 
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null &&
-sudo apt-get -y update && 
-sudo apt-get -y install docker-ce docker-ce-cli containerd.io &&
-sudo usermod -aG docker $USER 
+
+# Install Docker
+sudo apt-get update
+sudo apt-get install -y docker.io
+
+# Add the current user to the docker group
+sudo usermod -aG docker $USER
+
+# Verify Docker installation
+if [ -x "$(command -v docker)" ]; then
+    echo "Docker has been successfully installed"
+else
+    echo "Error installing Docker"
+    exit 1
+fi
+
+# Verify docker command without sudo
+if docker ps > /dev/null 2>&1; then
+    echo "User has been granted permission to run Docker without sudo"
+else
+    echo "Error granting permission to run Docker without sudo"
+    exit 1
+fi
+
+exit 0
