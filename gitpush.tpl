@@ -1,13 +1,13 @@
 #!/bin/bash
 
-read -p "Do you want to run this script? (y/n) " answer
-if [[ $answer = y ]] ; then
+read -p "Do you want to run this script? (y/n) " ans
+if [[ $ans = y ]] ; then
   read -p "Enter the name of the branch you want to push: " branch_name
-  read -p "Enter the commit message: " commit_message
+  read -p "Enter the commit message: " commit_msg
 
   git add . &&
-  git commit -m "$commit_message" &&
-  git push -f origin $branch_name
+  git commit -m "$commit_msg" &&
+  git push -u origin $branch_name
 
   if [ $? -eq 0 ]; then
     if [ "$branch_name" != "main" ]; then
@@ -19,16 +19,17 @@ if [[ $answer = y ]] ; then
     if command -v figlet > /dev/null && command -v lolcat > /dev/null; then
       figlet -c -f ~/.local/share/fonts/figlet-fonts/3d.flf DONE! | lolcat
     else
-      echo "
+      echo -e "\033[1;35m
 .　　 /＼＿_.ヘ／ヽ
 　　 /　　　(＿(⌒厂ヽ
 　　|　　　　　￣＼ノ
 ∩∩ ミ ⌒ ｏ　●　ミ
 ( ⊂) 乀＿＿＿＿＿ノ
-"
+\033[0m"
+
     fi
   else
-    echo "Git push failed. The script will not proceed."
+    echo -e "\033[31mGit push failed. The script will not proceed.\033[0m"
   fi
 fi
 
