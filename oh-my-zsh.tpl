@@ -1,47 +1,36 @@
 #!/bin/bash
 
-# Install zsh
-sudo apt-get update
-sudo apt-get install -y zsh
-
-# Set zsh as default shell
-chsh -s $(which zsh)
-
-# Install git if not installed
-if [ ! $(which git) ]; then
-  sudo apt-get install -y git
+if ! [ -x "$(command -v git)" ]; then
+  echo 'Error: git is not installed.' >&2
+  sudo apt update
+  sudo apt install git -y
 fi
 
-# Install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if ! [ -x "$(command -v zsh)" ]; then
+  echo 'Error: zsh is not installed.' >&2
+  sudo apt update
+  sudo apt install zsh -y
+fi
 
-# Change theme to agnoster
-sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' ~/.zshrc
+sudo apt-get update &&
+sudo apt-get install -y python3-pip &&
+sudo apt-get install -y autojump &&
 
-# Install syntax highlighting
-sudo apt-get install -y zsh-syntax-highlighting
 
-# Install auto jump
-cd ~/.oh-my-zsh/custom/plugins &&
-# git clone auto jump 
-git clone https://github.com/wting/autojump.git &&
-cd autojump &&
+yes | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# change python version
-sed -i "s/\#\!\/usr\/bin\/env\ python/\#\!\/usr\/bin\/env\ python3/" ~/.autojump/bin/autojump &&
-./install.py &&
-cd
+git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 
-# Add syntax highlighting, auto jump, and auto suggestions plugins to zsh
-sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting autojump zsh-autosuggestions)/g' ~/.zshrc
+git clone https://github.com/zsh-users/zsh-autosuggestions.git /home/ubuntu/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 
-# Reload zsh
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/ubuntu/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+sed -i 's/plugins=(git)/plugins=(git autojump zsh-autosuggestions zsh-syntax-highlighting)/g; s/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' ~/.zshrc
+
+exec zsh 
+
 source ~/.zshrc
 
-# Display completion messages
-echo "zsh and oh-my-zsh have been installed."
-echo "The agnoster theme has been enabled."
-echo "syntax highlighting, auto jump, and auto suggestions have been installed and added to plugins in .zshrc."
-echo "zsh has been set as the default shell."
+sudo chsh -s $(which zsh) ubuntu
 
-exit 0
+exec zsh
