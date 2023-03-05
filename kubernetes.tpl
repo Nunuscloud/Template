@@ -7,6 +7,9 @@ if [ ! -x "$(command -v docker)" ]; then
     sudo apt-get install -y docker.io
 fi
 
+sudo systemctl start docker 
+sudo usermod -aG docker $USER
+
 # Install Kubernetes
 sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2 curl
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
