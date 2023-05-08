@@ -31,13 +31,16 @@ sed -i 's/plugins=(git zsh-syntax-highlighting)/plugins=(git zsh-syntax-highligh
 sudo yum install python -y
 
 # Install Autojump
-git clone git://github.com/wting/autojump.git ~/autojump
+git clone https://github.com/wting/autojump.git ~/autojump
 cd ~/autojump
 ./install.py
+cd
 
 # Add Autojump to the Zsh configuration
 echo '[[ -s /home/$USER/.autojump/etc/profile.d/autojump.sh ]] && source /home/$USER/.autojump/etc/profile.d/autojump.sh' >> ~/.zshrc
 echo 'autoload -U compinit && compinit -u' >> ~/.zshrc
+
+exec zsh
 
 # Reload Zsh configuration
 source ~/.zshrc
